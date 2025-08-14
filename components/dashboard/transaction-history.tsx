@@ -96,48 +96,55 @@ export function TransactionHistory() {
         <div className="space-y-4">
           {/* Desktop Table View */}
           <div className="hidden md:block">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Recipient</TableHead>
-                  <TableHead>Amount</TableHead>
-                  <TableHead>Currency</TableHead>
-                  <TableHead>Fee</TableHead>
-                  <TableHead>Final Amount</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Date</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {paginatedTransactions.map((transaction) => (
-                  <TableRow key={transaction.id}>
-                    <TableCell>
-                      <div className="flex items-center space-x-3">
-                        <Avatar className="w-8 h-8">
-                          <AvatarFallback className="bg-primary/10 text-primary text-xs">
-                            {getInitials(transaction.recipientName)}
-                          </AvatarFallback>
-                        </Avatar>
-                        <div>
-                          <p className="font-medium text-sm">{transaction.recipientName}</p>
-                          <p className="text-xs text-muted-foreground">{transaction.recipientEmail}</p>
-                        </div>
-                      </div>
-                    </TableCell>
-                    <TableCell className="font-medium">${transaction.amount.toFixed(2)}</TableCell>
-                    <TableCell>
-                      <Badge variant="outline">{transaction.currency}</Badge>
-                    </TableCell>
-                    <TableCell className="text-destructive">${transaction.fee.toFixed(2)}</TableCell>
-                    <TableCell className="font-semibold">
-                      {transaction.finalAmount.toLocaleString()} {transaction.currency}
-                    </TableCell>
-                    <TableCell>{getStatusBadge(transaction.status)}</TableCell>
-                    <TableCell className="text-sm text-muted-foreground">{formatDate(transaction.createdAt)}</TableCell>
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="min-w-[200px]">Recipient</TableHead>
+                    <TableHead className="min-w-[100px]">Amount</TableHead>
+                    <TableHead className="min-w-[80px]">Currency</TableHead>
+                    <TableHead className="min-w-[80px]">Fee</TableHead>
+                    <TableHead className="min-w-[120px]">Final Amount</TableHead>
+                    <TableHead className="min-w-[100px]">Status</TableHead>
+                    <TableHead className="min-w-[140px]">Date</TableHead>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+                </TableHeader>
+                <TableBody>
+                  {paginatedTransactions.map((transaction) => (
+                    <TableRow key={transaction.id}>
+                      <TableCell>
+                        <div className="flex items-center space-x-3">
+                          <Avatar className="w-8 h-8">
+                            <AvatarFallback className="bg-primary/10 text-primary text-xs">
+                              {getInitials(transaction.recipientName)}
+                            </AvatarFallback>
+                          </Avatar>
+                          <div className="min-w-0">
+                            <p className="font-medium text-sm truncate">{transaction.recipientName}</p>
+                            <p className="text-xs text-muted-foreground truncate">{transaction.recipientEmail}</p>
+                          </div>
+                        </div>
+                      </TableCell>
+                      <TableCell className="font-medium">${transaction.amount.toFixed(2)}</TableCell>
+                      <TableCell>
+                        <Badge variant="outline">{transaction.currency}</Badge>
+                      </TableCell>
+                      <TableCell className="text-destructive">${transaction.fee.toFixed(2)}</TableCell>
+                      <TableCell className="font-semibold">
+                        {transaction.finalAmount.toLocaleString()} {transaction.currency}
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex items-center gap-2">
+                          {getStatusIcon(transaction.status)}
+                          <span className="text-sm">{getStatusBadge(transaction.status)}</span>
+                        </div>
+                      </TableCell>
+                      <TableCell className="text-sm text-muted-foreground">{formatDate(transaction.createdAt)}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
           </div>
 
           {/* Mobile Card View */}
@@ -145,19 +152,21 @@ export function TransactionHistory() {
             {paginatedTransactions.map((transaction) => (
               <Card key={transaction.id} className="p-4">
                 <div className="space-y-3">
-                  <div className="flex items-center justify-between">
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                     <div className="flex items-center space-x-3">
                       <Avatar className="w-10 h-10">
                         <AvatarFallback className="bg-primary/10 text-primary">
                           {getInitials(transaction.recipientName)}
                         </AvatarFallback>
                       </Avatar>
-                      <div>
-                        <p className="font-medium">{transaction.recipientName}</p>
-                        <p className="text-sm text-muted-foreground">{transaction.recipientEmail}</p>
+                      <div className="min-w-0 flex-1">
+                        <p className="font-medium truncate">{transaction.recipientName}</p>
+                        <p className="text-sm text-muted-foreground truncate">{transaction.recipientEmail}</p>
                       </div>
                     </div>
-                    {getStatusBadge(transaction.status)}
+                    <div className="flex-shrink-0">
+                      {getStatusBadge(transaction.status)}
+                    </div>
                   </div>
 
                   <div className="grid grid-cols-2 gap-4 text-sm">
@@ -187,45 +196,47 @@ export function TransactionHistory() {
 
           {/* Pagination */}
           {totalPages > 1 && (
-            <div className="flex items-center justify-between pt-4">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pt-4">
               <p className="text-sm text-muted-foreground">
                 Showing {(currentPage - 1) * ITEMS_PER_PAGE + 1} to{" "}
                 {Math.min(currentPage * ITEMS_PER_PAGE, transactions.length)} of {transactions.length} transactions
               </p>
-              <div className="flex items-center space-x-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={goToPreviousPage}
-                  disabled={currentPage === 1}
-                  className="flex items-center space-x-1 bg-transparent"
-                >
-                  <ChevronLeft className="w-4 h-4" />
-                  <span>Previous</span>
-                </Button>
-                <div className="flex items-center space-x-1">
+              <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-2 w-full sm:w-auto">
+                <div className="flex items-center gap-2 order-2 sm:order-1">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={goToPreviousPage}
+                    disabled={currentPage === 1}
+                    className="flex items-center gap-1 bg-transparent"
+                  >
+                    <ChevronLeft className="w-4 h-4" />
+                    <span className="hidden sm:inline">Previous</span>
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={goToNextPage}
+                    disabled={currentPage === totalPages}
+                    className="flex items-center gap-1 bg-transparent"
+                  >
+                    <span className="hidden sm:inline">Next</span>
+                    <ChevronRight className="w-4 h-4" />
+                  </Button>
+                </div>
+                <div className="flex items-center gap-1 order-1 sm:order-2">
                   {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
                     <Button
                       key={page}
                       variant={page === currentPage ? "default" : "outline"}
                       size="sm"
                       onClick={() => setCurrentPage(page)}
-                      className="w-8 h-8 p-0"
+                      className="w-8 h-8 p-0 text-xs"
                     >
                       {page}
                     </Button>
                   ))}
                 </div>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={goToNextPage}
-                  disabled={currentPage === totalPages}
-                  className="flex items-center space-x-1 bg-transparent"
-                >
-                  <span>Next</span>
-                  <ChevronRight className="w-4 h-4" />
-                </Button>
               </div>
             </div>
           )}

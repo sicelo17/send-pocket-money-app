@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { ChevronLeft, ChevronRight, ExternalLink } from "lucide-react"
+import { ExternalLink } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 const mockAds = [
@@ -51,19 +51,7 @@ export function AdsCarousel() {
     return () => clearInterval(interval)
   }, [isAutoPlaying])
 
-  const goToPrevious = () => {
-    setIsAutoPlaying(false)
-    setCurrentIndex((prev) => (prev - 1 + mockAds.length) % mockAds.length)
-    // Resume auto-play after 10 seconds
-    setTimeout(() => setIsAutoPlaying(true), 10000)
-  }
 
-  const goToNext = () => {
-    setIsAutoPlaying(false)
-    setCurrentIndex((prev) => (prev + 1) % mockAds.length)
-    // Resume auto-play after 10 seconds
-    setTimeout(() => setIsAutoPlaying(true), 10000)
-  }
 
   const goToSlide = (index: number) => {
     setIsAutoPlaying(false)
@@ -103,24 +91,7 @@ export function AdsCarousel() {
             </div>
           </div>
 
-          <Button
-            variant="outline"
-            size="icon"
-            className="absolute left-2 top-1/2 -translate-y-1/2 bg-background/90 backdrop-blur-sm w-10 h-10 sm:w-9 sm:h-9"
-            onClick={goToPrevious}
-            aria-label="Previous advertisement"
-          >
-            <ChevronLeft className="w-4 h-4" />
-          </Button>
-          <Button
-            variant="outline"
-            size="icon"
-            className="absolute right-2 top-1/2 -translate-y-1/2 bg-background/90 backdrop-blur-sm w-10 h-10 sm:w-9 sm:h-9"
-            onClick={goToNext}
-            aria-label="Next advertisement"
-          >
-            <ChevronRight className="w-4 h-4" />
-          </Button>
+
 
           <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex space-x-3 sm:space-x-2">
             {mockAds.map((_, index) => (

@@ -15,7 +15,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
+import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet"
 import { Home, Send, History, Menu, Shield, User, LogOut, ChevronDown } from "lucide-react"
 import { cn } from "@/lib/utils"
 
@@ -114,6 +114,12 @@ export function DashboardNav() {
                 </Button>
               </SheetTrigger>
               <SheetContent side="right" className="w-80">
+                <SheetHeader>
+                  <SheetTitle>Send Pocket Money</SheetTitle>
+                  <SheetDescription>
+                    Send pocket money to your children and manage their transactions.
+                  </SheetDescription>
+                </SheetHeader>
                 <div className="flex flex-col space-y-4 mt-8">
                   {navigation.map((item) => {
                     const Icon = item.icon
