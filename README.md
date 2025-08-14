@@ -53,7 +53,7 @@ A web application for Zimbabwean parents to send money to their children studyin
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/send-pocket-money-app.git
+   git clone https://github.com/sicelo17/send-pocket-money-app.git
    cd send-pocket-money-app
    ```
 
